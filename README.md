@@ -11,10 +11,11 @@ The scenario for which this solution will work:
 * You want to run several such commands, and want the output to match BigQuery output format
 
 The idea in a nutshell:
-Store BigQuery results as Serialized Strings in a property file, where the query (md5 hashed) is the key. (see RunSampleQuery.java and query.properties)
+Store BigQuery results as Serialized Strings in a local file, where the query (md5 hashed) is the key. (see RunSampleQuery.java and query.properties)
 
-In your unit test cases, mock BigQuery results to return from the previously serialized version of the Query output (see BigqueryTesting.java)
-Please reach out to me if you have suggestions for enhancing this approach or if you would like to contribute.
+In your unit test cases, mock BigQuery results to retrieve the previously serialized version of the Query output (see BigqueryTesting.java)
+
+Reach out to me for questions or suggestions. 
  
 
 ### Built With
