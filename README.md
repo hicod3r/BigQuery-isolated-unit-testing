@@ -10,10 +10,9 @@ The scenario for which this solution will work:
 * You don’t actually want to run the Query/DDL/DML command, but just work off the results
 * You want to run several such commands, and want the output to match BigQuery output format
 
-The idea in a nutshell:
-Store BigQuery results as Serialized Strings in a local file, where the query (md5 hashed) is the key. (see RunSampleQuery.java and query.properties)
-
-In your unit test cases, mock BigQuery results to retrieve the previously serialized version of the Query output (see BigqueryTesting.java)
+## The idea in a nutshell:
+* Store BigQuery results as Serialized Strings in a local file, where the query (md5 hashed) is the key. (see RunSampleQuery.java and query.properties)
+* In your unit test cases, mock BigQuery results to retrieve the previously serialized version of the Query output (see BigqueryTesting.java)
 
 Reach out to me for questions or suggestions. 
  
