@@ -4,7 +4,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Making BigQuery unit tests work when your local/isolated environment cannot connect to BigQuery APIs is challenging. This article describes how you can stub/mock your BigQuery responses for unit test cases.
+Making BigQuery unit tests work when your local/isolated environment cannot connect to BigQuery APIs is challenging. This project demonstrates how you can stub/mock your BigQuery responses for unit test cases.
+
 The scenario for which this solution will work:
 * You need to unit test a function which calls on BigQuery (SQL,DDL,DML)
 * You don’t actually want to run the Query/DDL/DML command, but just work off the results
