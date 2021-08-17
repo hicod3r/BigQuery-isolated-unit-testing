@@ -1,14 +1,6 @@
-
+/target/
+.classpath
 .DS_Store
 .project
 .settings/org.eclipse.jdt.core.prefs
 .settings/org.eclipse.m2e.core.prefs
-target/classes/com/hicoder/samples/BigQueryUtils.class
-target/classes/com/hicoder/samples/RunSampleQuery.class
-target/classes/META-INF/MANIFEST.MF
-target/classes/META-INF/maven/com.hicoder.samples/BigQueryUnitTests/pom.properties
-target/classes/META-INF/maven/com.hicoder.samples/BigQueryUnitTests/pom.xml
-target/classes/query.properties
-target/test-classes/BigqueryTesting$1.class
-target/test-classes/BigqueryTesting.class
-.classpath

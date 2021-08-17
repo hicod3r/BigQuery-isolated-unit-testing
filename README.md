@@ -1,44 +1,18 @@
-
-
-
-
-
-
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-      </ul>
-    </li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
-
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Many organizations would like to unit-test bigquery on a local environment that may not have access to BigQuery apis. Since BigQuery does not have a local simulator, this becomes challenging
+Making BigQuery unit tests work when your local/isolated environment cannot connect to BigQuery APIs is challenging. This article describes how you can stub/mock your BigQuery responses for unit test cases.
+The scenario for which this solution will work:
+* You need to unit test a function which calls on BigQuery (SQL,DDL,DML)
+* You don’t actually want to run the Query/DDL/DML command, but just work off the results
+* You want to run several such commands, and want the output to match BigQuery output format
 
-This project outlines an approach that can help you overcome this by mocking BigQuery calls. This is useful if 
+The idea in a nutshell:
+Store BigQuery results as Serialized Strings in a property file, where the query (md5 hashed) is the key. (see RunSampleQuery.java and query.properties)
 
-* You are unit-testing a function where BigQuery results are getting used. 
-* You don't intend to actually test your queries. 
-* You have a limited set of queries and outputs that you are looking to test. 
-
-
+In your unit test cases, mock BigQuery results to return from the previously serialized version of the Query output (see BigqueryTesting.java)
+Please reach out to me if you have suggestions for enhancing this approach or if you would like to contribute.
+ 
 
 ### Built With
 * [Mockito](https://site.mockito.org)
@@ -47,16 +21,13 @@ This project outlines an approach that can help you overcome this by mocking Big
 <!-- GETTING STARTED -->
 ## Getting Started
 
-1. Import Maven Product
-2. Modify and run RunSampleQuery.java
-3. Modify and Run Junit test cases
-4. Copy this approach to your project 
+1. Modify and run RunSampleQuery.java
+2. Modify and Run Junit test cases
+3. Copy this approach to your project 
 
 ### Prerequisites
 
-To run RunSampleQuery.java you need to have been authenticated via GoogleCloud CLI
-
-
+To run RunSampleQuery.java you need to have been authenticated via GoogleCloud CLI. RunSampleQuery.java cannot be run in an isolated environment but the Unit Tests can run without network connectivity.
 
 <!-- LICENSE -->
 ## License
