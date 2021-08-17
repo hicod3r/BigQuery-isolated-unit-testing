@@ -21,28 +21,28 @@ import org.mockito.stubbing.Answer;
 
 import com.google.cloud.bigquery.FieldValueList;
 import com.google.cloud.bigquery.TableResult;
-import com.hicoder.samples.BigQueryUtils;
+import com.hicoder.samples.Toolbox;
 
 //import utilities.BqUtils;
 
 public class BigqueryTesting {
 	
 	
-	@Mock private BigQueryUtils utils;
+	@Mock private Toolbox utils;
 	
-	Properties prop = new Properties();
+	Properties queryReponse = new Properties();
 	
-	String propFileName = "query.properties";
+	String queryReponseRef = "query.properties";
 	
 
 	@Before
 	public void setUp() throws Exception {
 		
 		
-		InputStream is = getClass().getClassLoader().getResourceAsStream(propFileName);
+		InputStream is = getClass().getClassLoader().getResourceAsStream(queryReponseRef);
 
 		if (is != null) {
-			prop.load(is);
+			queryReponse.load(is);
 		} else {
 			throw new FileNotFoundException("Query Property file not in classpath");
 		}
@@ -67,16 +67,13 @@ public class BigqueryTesting {
 	@Test
 	public void testBaseballCount() throws InterruptedException {
 		
-		TableResult xyz = utils.runQuery("SELECT count(*) FROM `bigquery-public-data.baseball.games_post_wide` LIMIT 1000");
+		TableResult tableResults = utils.runQuery("SELECT count(*) FROM `bigquery-public-data.baseball.games_post_wide` LIMIT 1000");
 		
-		Iterable<FieldValueList> results = xyz.getValues();
+		Iterable<FieldValueList> results = tableResults.getValues();
 		
 		String resultCount = "";
 		
 		for (FieldValueList x : results){
-			
-			
-			System.out.println(x.get(0).getStringValue());
 			
 			resultCount = x.get(0).getStringValue();
 			
@@ -88,18 +85,15 @@ public class BigqueryTesting {
 	
 	
 	@Test
-	public void terstAustinBikeCount() throws InterruptedException {
+	public void testAustinBikeCount() throws InterruptedException {
 		
-		TableResult xyz = utils.runQuery("SELECT count(*) FROM `bigquery-public-data.austin_crime.crime` LIMIT 1000");
+		TableResult tableResults = utils.runQuery("SELECT count(*) FROM `bigquery-public-data.austin_crime.crime` LIMIT 1000");
 		
-		Iterable<FieldValueList> results = xyz.getValues();
+		Iterable<FieldValueList> results = tableResults.getValues();
 		
 		String resultCount = "";
 		
 		for (FieldValueList x : results){
-			
-			
-			System.out.println(x.get(0).getStringValue());
 			
 			resultCount = x.get(0).getStringValue();
 			
@@ -113,19 +107,15 @@ public class BigqueryTesting {
 	
 	public TableResult getResponse(String query) throws ClassNotFoundException, IOException, NoSuchAlgorithmException {
 		
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		md.update(query.getBytes(Charset.forName("UTF8")));
 		
-		byte[] resultByte = md.digest();
+		String key = Toolbox.getInstance().convertToMd5(query);
 		
-		String key = new String(Hex.encodeHex(resultByte));
-		
-		String result = (String) prop.get(key);
+		String result = (String) queryReponse.get(key);
 		
 		System.out.println(result);
 		
 		if(query != null)
-			return (TableResult) BigQueryUtils.getInstance().fromString(result);
+			return (TableResult) Toolbox.getInstance().deserializeFromBase64(result);
 		
 		return null;
 		

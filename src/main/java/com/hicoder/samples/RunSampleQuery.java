@@ -16,25 +16,19 @@ public class RunSampleQuery {
 	public static void main(String[] args) throws InterruptedException, IOException, NoSuchAlgorithmException {
 
 		
-		String[] queries = {"SELECT count(*) FROM `bigquery-public-data.baseball.games_post_wide` LIMIT 1000","SELECT count(*) FROM `bigquery-public-data.austin_crime.crime` LIMIT 1000"};
+		String[] queries = {"SELECT count(*) FROM `bigquery-public-data.baseball.games_post_wide` LIMIT 1000",
+				"SELECT count(*) FROM `bigquery-public-data.austin_crime.crime` LIMIT 1000"};
 		
-		Properties prop = BigQueryUtils.getInstance().getPropertyFile();
+		Properties prop = Toolbox.getInstance().getPropertyFile();
 		
 		
 		for( String query : queries) {
 			
-			TableResult tableResults = BigQueryUtils.getInstance().runQuery(query);
+			TableResult tableResults = Toolbox.getInstance().runQuery(query);
 			
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(query.getBytes(Charset.forName("UTF8")));
+			String key = Toolbox.getInstance().convertToMd5(query);
 			
-			byte[] resultByte = md.digest();
-			
-			String key = new String(Hex.encodeHex(resultByte));
-			
-			prop.setProperty(key, BigQueryUtils.getInstance().toString((tableResults)));
-
-			System.out.println(BigQueryUtils.getInstance().toString((tableResults)));
+			prop.setProperty(key, Toolbox.getInstance().serializeToBase64((tableResults)));
 		}
 		
 		
@@ -42,9 +36,6 @@ public class RunSampleQuery {
 		prop.store(fr, null);
 		
 		fr.close();
-		
-		
-		
 
 	}
 

@@ -7,9 +7,14 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Properties;
 import java.util.UUID;
+
+import org.apache.commons.codec.binary.Hex;
 
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.BigQueryOptions;
@@ -19,20 +24,19 @@ import com.google.cloud.bigquery.JobInfo;
 import com.google.cloud.bigquery.QueryJobConfiguration;
 import com.google.cloud.bigquery.TableResult;
 
-public class BigQueryUtils {
+public class Toolbox {
 	
 		
 	private static BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
 	
-	private static BigQueryUtils _instance = new BigQueryUtils();
+	private static Toolbox _instance = new Toolbox();
 	
-	private void BigQueryUtils() {
+	private Toolbox() {
 		
-		
-		
+				
 	}
 	
-	public static BigQueryUtils getInstance() {
+	public static Toolbox getInstance() {
 		
 		return _instance;
 	}
@@ -60,7 +64,7 @@ public class BigQueryUtils {
 	  
 	  
 	  
-	  public Object fromString( String s ) throws IOException ,ClassNotFoundException {
+	  public Object deserializeFromBase64( String s ) throws IOException ,ClassNotFoundException {
 
 			byte [] data = Base64.getDecoder().decode( s );
 			ObjectInputStream ois = new ObjectInputStream( 
@@ -71,7 +75,7 @@ public class BigQueryUtils {
 			return o;
 		}
 		
-		public String toString( Serializable o ) throws IOException {
+		public String serializeToBase64( Serializable o ) throws IOException {
 	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	        ObjectOutputStream oos = new ObjectOutputStream( baos );
 	        oos.writeObject( o );
@@ -89,6 +93,17 @@ public class BigQueryUtils {
 			
 			return prop;
 
+		}
+		
+		public String convertToMd5(String text ) throws NoSuchAlgorithmException {
+			
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(text.getBytes(Charset.forName("UTF8")));
+			
+			byte[] resultByte = md.digest();
+			
+			return new String(Hex.encodeHex(resultByte));
+			
 		}
 
 
